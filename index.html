@@ -1,20 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Animatrix AR</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
 
-<head>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.2/aframe/build/aframe-ar.js"></script>
-</head>
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.7/aframe/build/aframe-ar.js"></script>
 
-<body style="margin: 0; overflow: hidden">
-    <a-scene embedded arjs>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      .arjs-loader {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: white;
+      }
+    </style>
+  </head>
 
-        <a-marker type="pattern" url="hiro.patt">
-            <a-text value="HIRO DETECTED" color="red" position="0 0.5 0"></a-text>
-        </a-marker>
+  <body>
+    <div class="arjs-loader">
+      <h2>Starting Camera...</h2>
+      <p>Allow permission & point to HIRO marker</p>
+    </div>
 
-        <a-entity camera></a-entity>
+    <a-scene
+      embedded
+      vr-mode-ui="enabled: false"
+      arjs="sourceType: webcam; debugUIEnabled: false;"
+    >
+      <a-marker preset="hiro">
+        <a-box position="0 0.5 0" rotation="0 45 0" color="#4CC3D9"></a-box>
+
+        <a-text
+          value="ANIMATRIX"
+          position="-1 1.2 0"
+          rotation="-90 0 0"
+          width="4"
+          color="#00ff00"
+        ></a-text>
+      </a-marker>
+
+      <a-entity camera></a-entity>
     </a-scene>
-</body>
 
+    <script>
+      window.addEventListener("arjs-video-loaded", () =>
+        document.querySelector(".arjs-loader").remove()
+      );
+    </script>
+  </body>
 </html>

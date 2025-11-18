@@ -1,80 +1,71 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8" />
-  <title>Smart AR Dashboard (DEBUG MODE)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <head>
+    <meta charset="utf-8">
+    <title>Simple AR Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ar.js@3.4.7/aframe/build/aframe-ar.js"></script>
 
-  <style>
-    body { margin:0; overflow:hidden; }
-    #fakecam {
-      position:fixed; top:0; left:0;
-      width:100vw; height:100vh;
-      background:black;
-      display:flex; align-items:center; justify-content:center;
-      color:white; font-size:22px;
-      z-index:-1;
-    }
-  </style>
-</head>
+    <style>
+      body { margin:0; overflow:hidden; }
+      #loader {
+        position:fixed; top:0; left:0; width:100%; height:100%;
+        background:black; color:white; font-size:22px;
+        display:flex; justify-content:center; align-items:center;
+      }
+    </style>
+  </head>
 
-<body>
+  <body>
+    <div id="loader">Starting Camera...</div>
 
-<div id="fakecam">
-  🔧 DEBUG MODE<br>
-  (Camera Disabled)
-</div>
+    <a-scene
+      embedded
+      arjs="sourceType: camera; debugUIEnabled: false;"
+    >
 
-<a-scene embedded>
+      <a-marker preset="hiro">
 
-  <a-entity position="0 1.6 -3">
-    <a-plane width="3" height="2" color="#111"></a-plane>
+        <a-text value="SMART AR"
+          position="-0.8 1 0"
+          rotation="-90 0 0"
+          width="3"
+          color="yellow">
+        </a-text>
 
-    <a-text
-      value="SMART AR HOME SYSTEM"
-      position="-1.2 0.6 0"
-      width="3"
-      color="yellow"
-    ></a-text>
+        <a-text value="Temp: 28°C"
+          position="-0.8 0.6 0"
+          rotation="-90 0 0"
+          width="3"
+          color="#00FFAA">
+        </a-text>
 
-    <a-text id="temp"
-      value="Temperature: --"
-      position="-1 0.2 0"
-      width="3"
-      color="#00FFAA"
-    ></a-text>
+        <a-text value="Gas: 180 ppm"
+          position="-0.8 0.3 0"
+          rotation="-90 0 0"
+          width="3"
+          color="#FF4444">
+        </a-text>
 
-    <a-text id="gas"
-      value="Gas: --"
-      position="-1 -0.2 0"
-      width="3"
-      color="#FF4444"
-    ></a-text>
+        <a-text value="Humidity: 65%"
+          position="-0.8 0 0"
+          rotation="-90 0 0"
+          width="3"
+          color="#55AAFF">
+        </a-text>
 
-    <a-text id="hum"
-      value="Humidity: --"
-      position="-1 -0.6 0"
-      width="3"
-      color="#55AAFF"
-    ></a-text>
-  </a-entity>
+      </a-marker>
 
-</a-scene>
+      <a-entity camera></a-entity>
 
-<script>
-async function updateValues() {
-  try {
-    const r = await fetch("data.json?nocache=" + Date.now());
-    const d = await r.json();
-    temp.setAttribute("value", "Temperature: " + d.temp + " °C");
-    gas.setAttribute("value", "Gas: " + d.gas + " ppm");
-    hum.setAttribute("value", "Humidity: " + d.humidity + " %");
-  } catch {}
-}
-setInterval(updateValues, 1500);
-</script>
+    </a-scene>
 
-</body>
+    <script>
+    window.addEventListener("arjs-video-loaded", () =>
+      document.getElementById("loader").remove()
+    );
+    </script>
+  </body>
 </html>
